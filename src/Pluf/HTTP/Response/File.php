@@ -37,6 +37,7 @@ class Pluf_HTTP_Response_File extends Pluf_HTTP_Response
     function render($output_body=true)
     {
         $this->headers['Content-Length'] = (string)filesize($this->content);
+        $this->headers['Last-Modified'] = gmdate('D, d M Y H:i:s \G\M\T', filemtime($this->content));
         $this->outputHeaders();
         if ($output_body) {
             $fp = fopen($this->content, 'rb');

@@ -114,7 +114,7 @@ class Pluf_HTTP_Response
      * @param string MimeType of the response (null) if not given will
      * default to the one given in the configuration 'mimetype'
      */
-    function __construct($content='', $mimetype=null)
+    function __construct($content='', $mimetype=null, $max_age=300, $cache_control='private')
     {
         if (is_null($mimetype)) {
             $mimetype = Pluf::f('mimetype', 'text/html').'; charset=utf-8';
@@ -122,6 +122,9 @@ class Pluf_HTTP_Response
         $this->content = $content;
         $this->headers['Content-Type'] = $mimetype;
         $this->headers['X-Powered-By'] = 'Pluf - http://pluf.org/';
+        $this->headers['Cache-Control'] = $cache_control . ', max-age=' . $max_age;
+        $this->headers['Expires'] = gmdate('D, d M Y H:i:s \G\M\T', time() + $max_age);
+        $this->headers['Date'] = gmdate('D, d M Y H:i:s \G\M\T', time());
         $this->status_code = 200;
         $this->cookies = array();
     }
