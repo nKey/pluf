@@ -68,7 +68,9 @@ class Pluf_Cache_File extends Pluf_Cache
             $timeout = Pluf::f('cache_timeout', 300);
         }
         if (!file_exists($dir)) {
+            $old = umask(0);
             mkdir($dir, 0777, true);
+            umask($old);
         }
         $expire  = $_SERVER['REQUEST_TIME'] + $timeout;
         $success = file_put_contents($fname, $expire."\n".serialize($value), LOCK_EX);
